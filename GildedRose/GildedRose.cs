@@ -5,31 +5,31 @@ namespace Katas
 {
     public class GildedRose
     {
-        private static IList<Item> items = null;
+        private static IList<Item> _items = null;
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("OMGHAI!");
 
-			items = new List<Item>();
-			items.Add(new Item("+5 Dexterity Vest", 10, 20));
-			items.Add(new Item("Aged Brie", 2, 0));
-			items.Add(new Item("Elixir of the Mongoose", 5, 7));
-			items.Add(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
-			items.Add(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
-			items.Add(new Item("Conjured Mana Cake", 3, 6));
+			_items = new List<Item>();
+			_items.Add(new Item("+5 Dexterity Vest", 10, 20));
+			_items.Add(new Item("Aged Brie", 2, 0));
+			_items.Add(new Item("Elixir of the Mongoose", 5, 7));
+			_items.Add(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
+			_items.Add(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
+			_items.Add(new Item("Conjured Mana Cake", 3, 6));
 
-			updateQuality();
+			UpdateQuality();
         }
 
-		public static void updateQuality()
+		public static void UpdateQuality()
 		{
-			for (int i = 0; i < items.Count; i++)
+			for (int i = 0; i < _items.Count; i++)
 			{
-				updateQualityPerItem(items[i]);
+				UpdateQualityPerItem(_items[i]);
 			}
 		}
-		public static Item updateQualityPerItem(Item item)
+		public static Item UpdateQualityPerItem(Item item)
 		{
 			if (item.Name == "Sulfuras, Hand of Ragnaros")
 			{

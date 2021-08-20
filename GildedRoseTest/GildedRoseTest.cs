@@ -16,7 +16,7 @@ namespace Katas
         [InlineData("Normal items can have quality more than 50", 10, 54, 53)]
         public void NormalItemTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.updateQualityPerItem(new Item("NormalItem", sellIn, quality));
+            var actual = GildedRose.UpdateQualityPerItem(new Item("NormalItem", sellIn, quality));
             actual.Quality.Should().Be(expectedQuality);
             actual.SellIn.Should().Be(sellIn - 1);
         }
@@ -31,7 +31,7 @@ namespace Katas
         [InlineData("Backstage Pass quality drops to zero when no days left", 0, 20, 0)]
         public void BackstagePassesTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.updateQualityPerItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            var actual = GildedRose.UpdateQualityPerItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             actual.Quality.Should().Be(expectedQuality);
             actual.SellIn.Should().Be(sellIn - 1);
         }
@@ -45,7 +45,7 @@ namespace Katas
         [InlineData("If Aged Brie quality greater than 50, quality does not increase", 10, 51, 51)]
         public void AgedBrieTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.updateQualityPerItem(new Item("Aged Brie", sellIn, quality));
+            var actual = GildedRose.UpdateQualityPerItem(new Item("Aged Brie", sellIn, quality));
             actual.Quality.Should().Be(expectedQuality);
             actual.SellIn.Should().Be(sellIn - 1);
         }
@@ -56,11 +56,13 @@ namespace Katas
         [InlineData("Sulfuras does not change quality or sell in", -1, 80, 80)]
         public void TestSulfurasShouldNotDecreaseQualityAndNeverToBeSold(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.updateQualityPerItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, quality));
+            var actual = GildedRose.UpdateQualityPerItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, quality));
 
             actual.Quality.Should().Be(expectedQuality);
             actual.SellIn.Should().Be(sellIn);
         }
+        
+        // TODO:  "Conjured" items degrade in Quality twice as fast as normal items
         
     }
 }
