@@ -53,7 +53,13 @@ namespace Katas
         private static void UpdateQualityForItem(Item item)
         {
 	        if (!ItemValueIncreasesWithAge(item))
+	        {
 		        DecreaseQuality(item);
+		        if (item.Name.StartsWith("Conjured"))
+		        {
+			        DecreaseQuality(item);
+		        }
+	        }
 	        else
 	        {
 		        IncreaseQuality(item);
@@ -84,6 +90,10 @@ namespace Katas
 					break;
 				default:
 					DecreaseQuality(item);
+					if (item.Name.StartsWith("Conjured"))
+					{
+						DecreaseQuality(item);
+					}
 					break;
 			}
 		}

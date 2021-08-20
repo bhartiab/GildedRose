@@ -61,7 +61,25 @@ namespace Katas
             agedItem.SellIn.Should().Be(sellIn);
         }
         
-        // TODO:  "Conjured" items degrade in Quality twice as fast as normal items
+        [Theory]
+        [InlineData("Conjured Item degrades two per day", 1, 20, 18)]
+        [InlineData("Conjured Item does not degrade past zero", 1, 1, 0)]
+        [InlineData("Conjured Item degrades four when expired per day", 0, 20, 16)]
+        [InlineData("Expired Conjured Item does not degrade past zero", 0, 3, 0)]
+        public void ConjuredItemsTests(string testName, int sellIn, int quality, int expectedQuality)
+        {
+            var agedItem = AgeItem(new Item("Conjured Mana Cake", sellIn, quality));
+            agedItem.Quality.Should().Be(expectedQuality);
+            agedItem.SellIn.Should().Be(sellIn - 1);
+        }
+
+        [Fact]
+        public void ItemsWithNameStartingWithConjuredDegradeTwiceAsFast()
+        {
+            var agedItem = AgeItem(new Item("Conjured Health Potion", 1, 10));
+            agedItem.Quality.Should().Be(8);
+            agedItem.SellIn.Should().Be(0);
+        }
         
         private static Item AgeItem(Item item)
         {
