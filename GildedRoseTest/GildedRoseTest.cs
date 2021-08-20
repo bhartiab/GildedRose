@@ -7,7 +7,7 @@ namespace Katas
 {
     public class GuildedRoseTest
     {
-        
+
         [Theory]
         [InlineData("Quality of an item degrades daily", 1, 20, 19)]
         [InlineData("Quality of an item degrades twice if sell date is passed", 0, 20, 18)]
@@ -16,9 +16,9 @@ namespace Katas
         [InlineData("Normal items can have quality more than 50", 10, 54, 53)]
         public void NormalItemTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.AgeItem(new Item("NormalItem", sellIn, quality));
-            actual.Quality.Should().Be(expectedQuality);
-            actual.SellIn.Should().Be(sellIn - 1);
+            var agedItem = AgeItem(new Item("NormalItem", sellIn, quality));
+            agedItem.Quality.Should().Be(expectedQuality);
+            agedItem.SellIn.Should().Be(sellIn - 1);
         }
         
         [Theory]
@@ -31,9 +31,9 @@ namespace Katas
         [InlineData("Backstage Pass quality drops to zero when no days left", 0, 20, 0)]
         public void BackstagePassesTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.AgeItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
-            actual.Quality.Should().Be(expectedQuality);
-            actual.SellIn.Should().Be(sellIn - 1);
+            var agedItem = AgeItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            agedItem.Quality.Should().Be(expectedQuality);
+            agedItem.SellIn.Should().Be(sellIn - 1);
         }
         
         [Theory]
@@ -45,9 +45,9 @@ namespace Katas
         [InlineData("If Aged Brie quality greater than 50, quality does not increase", 10, 51, 51)]
         public void AgedBrieTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.AgeItem(new Item("Aged Brie", sellIn, quality));
-            actual.Quality.Should().Be(expectedQuality);
-            actual.SellIn.Should().Be(sellIn - 1);
+            var agedItem = AgeItem(new Item("Aged Brie", sellIn, quality));
+            agedItem.Quality.Should().Be(expectedQuality);
+            agedItem.SellIn.Should().Be(sellIn - 1);
         }
         
         [Theory]
@@ -56,13 +56,19 @@ namespace Katas
         [InlineData("Sulfuras does not change quality or sell in", -1, 80, 80)]
         public void TestSulfurasShouldNotDecreaseQualityAndNeverToBeSold(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.AgeItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, quality));
-
-            actual.Quality.Should().Be(expectedQuality);
-            actual.SellIn.Should().Be(sellIn);
+            var agedItem = AgeItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, quality));
+            agedItem.Quality.Should().Be(expectedQuality);
+            agedItem.SellIn.Should().Be(sellIn);
         }
         
         // TODO:  "Conjured" items degrade in Quality twice as fast as normal items
+        
+        private static Item AgeItem(Item item)
+        {
+            var store = new GildedRose(new List<Item>() {item});
+            store.AgeItems();
+            return store.Items[0];
+        }
         
     }
 }

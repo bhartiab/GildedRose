@@ -5,11 +5,11 @@ namespace Katas
 {
     public class GildedRose
     {
-        private IList<Item> _items;
+        public IList<Item> Items { get; }
 
-        private GildedRose(IList<Item> items)
+        public GildedRose(IList<Item> items)
         {
-	        _items = items;
+	        Items = items;
         }
 
         public static void Main(string[] args)
@@ -32,16 +32,16 @@ namespace Katas
 
 		public void AgeItems()
 		{
-			foreach (var item in _items)
+			foreach (var item in Items)
 			{
 				AgeItem(item);
 			}
 		}
-		public static Item AgeItem(Item item)
+		private static void AgeItem(Item item)
 		{
 			if (item.Name == "Sulfuras, Hand of Ragnaros")
 			{
-				return item;
+				return;
 			}
 
 			UpdateQualityForItem(item);
@@ -51,13 +51,15 @@ namespace Katas
 			{
 				HandleExpiredItem(item);
 			}
-
-			return item;
 		}
 
         private static void UpdateQualityForItem(Item item)
         {
-	        if (ItemValueIncreasesWithAge(item))
+	        if (!ItemValueIncreasesWithAge(item))
+	        {
+		        DecreaseQuality(item);
+	        }
+	        else
 	        {
 		        IncreaseQuality(item);
 
@@ -65,11 +67,7 @@ namespace Katas
 		        {
 			        IncreaseQualityForBackstageItem(item);
 		        }
-
-		        return;
 	        }
-	        
-	        DecreaseQuality(item);
         }
         
         private static void IncreaseQualityForBackstageItem(Item item)
