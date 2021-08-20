@@ -63,12 +63,7 @@ namespace Katas
 	        
 	        DecreaseQuality(item);
         }
-
-        private static bool ItemValueIncreasesWithAge(Item item)
-        {
-	        return item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert";
-        }
-
+        
         private static void IncreaseQualityForBackstageItem(Item item)
 		{
 			if (item.SellIn < 11)
@@ -80,19 +75,22 @@ namespace Katas
 
 		private static void HandleExpiredItem(Item  item)
 		{
-			if (item.Name == "Aged Brie")
+			switch (item.Name)
 			{
-				IncreaseQuality(item);
-				return;
+				case "Aged Brie":
+					IncreaseQuality(item);
+					break;
+				case "Backstage passes to a TAFKAL80ETC concert":
+					item.Quality = 0;
+					break;
+				default:
+					DecreaseQuality(item);
+					break;
 			}
-			
-			if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-			{
-				item.Quality = 0;
-				return;
-			}
-			
-			DecreaseQuality(item);
+		}
+		private static bool ItemValueIncreasesWithAge(Item item)
+		{
+			return item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert";
 		}
 
 		private static void IncreaseQuality(Item item)
