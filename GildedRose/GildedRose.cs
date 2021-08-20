@@ -19,30 +19,35 @@ namespace Katas
 			_items.Add(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
 			_items.Add(new Item("Conjured Mana Cake", 3, 6));
 
-			UpdateQuality();
+			AgeItems();
         }
 
-		public static void UpdateQuality()
+		public static void AgeItems()
 		{
-			for (int i = 0; i < _items.Count; i++)
+			foreach (var item in _items)
 			{
-				UpdateQualityPerItem(_items[i]);
+				AgeItem(item);
 			}
 		}
-		public static Item UpdateQualityPerItem(Item item)
+		public static Item AgeItem(Item item)
 		{
 			if (item.Name == "Sulfuras, Hand of Ragnaros")
 			{
 				return item;
 			}
 
-			UpdateQualityValue(item);
-			UpdateSellInValue(item);
+			UpdateQualityForItem(item);
+			--item.SellIn;
+
+			if (item.SellIn < 0)
+			{
+				HandleExpiredItem(item);
+			}
 
 			return item;
 		}
 
-        private static void UpdateQualityValue(Item item)
+        private static void UpdateQualityForItem(Item item)
         {
 	        if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
 			{
@@ -75,15 +80,6 @@ namespace Katas
 			if (item.SellIn < 6 && item.Quality < 50)
 			{
 				item.Quality++;
-			}
-		}
-        private static void UpdateSellInValue(Item item)
-		{
-			item.SellIn = (item.SellIn - 1);
-
-			if (item.SellIn < 0)
-			{
-				HandleExpiredItem(item);
 			}
 		}
 
