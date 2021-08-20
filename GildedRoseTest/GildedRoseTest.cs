@@ -8,18 +8,6 @@ namespace Katas
     public class GuildedRoseTest
     {
         
-        [Fact]
-        public void TestSulfurasShouldNotDecreaseQualityAndNeverToBeSold()
-        {
-
-            var inputItem = new Item("Sulfuras, Hand of Ragnaros", 0, 80);
-
-            var actual = GildedRose.updateQualityPerItem(inputItem);
-
-            actual.Quality.Should().Be(80);
-            actual.SellIn.Should().Be(0);
-        }
-        
         [Theory]
         [InlineData("Quality of an item degrades daily", 1, 20, 19)]
         [InlineData("Quality of an item degrades twice if sell date is passed", 0, 20, 18)]
@@ -29,6 +17,21 @@ namespace Katas
         public void NormalItemTests(string testName, int sellIn, int quality, int expectedQuality)
         {
             var actual = GildedRose.updateQualityPerItem(new Item("NormalItem", sellIn, quality));
+            actual.Quality.Should().Be(expectedQuality);
+            actual.SellIn.Should().Be(sellIn - 1);
+        }
+        
+        [Theory]
+        [InlineData("Backstage Pass quality increases by 1 when there are 99 days (more than 10 days)", 99, 20, 21)]
+        [InlineData("Backstage Pass quality increases by 1 when there are ll days (more than 10 days)", 11, 20, 21)]
+        [InlineData("Backstage Pass quality increases by 2 when there are 10 days (10 days or less)", 10, 20, 22)]
+        [InlineData("Backstage Pass quality increases by 2 when there are 6 days (10 days or less)", 6, 20, 22)]
+        [InlineData("Backstage Pass quality increases by 3 when there are 5 days (5 days or less)", 5, 20, 23)]
+        [InlineData("Backstage Pass quality increases by 3 when there is 1 day left (5 days or less)", 1, 20, 23)]
+        [InlineData("Backstage Pass quality drops to zero when no days left", 0, 20, 0)]
+        public void BackstagePassesTests(string testName, int sellIn, int quality, int expectedQuality)
+        {
+            var actual = GildedRose.updateQualityPerItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
             actual.Quality.Should().Be(expectedQuality);
             actual.SellIn.Should().Be(sellIn - 1);
         }
@@ -46,20 +49,18 @@ namespace Katas
             actual.Quality.Should().Be(expectedQuality);
             actual.SellIn.Should().Be(sellIn - 1);
         }
-
+        
         [Theory]
-        [InlineData("Quality increases by 1 when there are 99 days (more than 10 days)", 99, 20, 21)]
-        [InlineData("Quality increases by 1 when there are ll days (more than 10 days)", 11, 20, 21)]
-        [InlineData("Quality increases by 2 when there are 10 days (10 days or less)", 10, 20, 22)]
-        [InlineData("Quality increases by 2 when there are 6 days (10 days or less)", 6, 20, 22)]
-        [InlineData("Quality increases by 3 when there are 5 days (5 days or less)", 5, 20, 23)]
-        [InlineData("Quality increases by 3 when there is 1 day left (5 days or less)", 1, 20, 23)]
-        [InlineData("Quality drops to zero when no days left", 0, 20, 0)]
-        public void BackstagePassesTests(string testName, int sellIn, int quality, int expectedQuality)
+        [InlineData("Sulfuras does not change quality or sell in", 1, 20, 20)]
+        [InlineData("Sulfuras does not change quality or sell in", 0, 80, 80)]
+        [InlineData("Sulfuras does not change quality or sell in", -1, 80, 80)]
+        public void TestSulfurasShouldNotDecreaseQualityAndNeverToBeSold(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var actual = GildedRose.updateQualityPerItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            var actual = GildedRose.updateQualityPerItem(new Item("Sulfuras, Hand of Ragnaros", sellIn, quality));
+
             actual.Quality.Should().Be(expectedQuality);
-            actual.SellIn.Should().Be(sellIn - 1);
+            actual.SellIn.Should().Be(sellIn);
         }
+        
     }
 }
