@@ -5,7 +5,8 @@ namespace Katas
 {
     public class GildedRose
     {
-        public IList<Item> Items { get; }
+	    private const int MaxQualityForIncrease = 50;
+	    public IList<Item> Items { get; }
 
         public GildedRose(IList<Item> items)
         {
@@ -40,33 +41,25 @@ namespace Katas
 		private static void AgeItem(Item item)
 		{
 			if (item.Name == "Sulfuras, Hand of Ragnaros")
-			{
 				return;
-			}
 
 			UpdateQualityForItem(item);
 			--item.SellIn;
 
 			if (item.SellIn < 0)
-			{
 				HandleExpiredItem(item);
-			}
 		}
 
         private static void UpdateQualityForItem(Item item)
         {
 	        if (!ItemValueIncreasesWithAge(item))
-	        {
 		        DecreaseQuality(item);
-	        }
 	        else
 	        {
 		        IncreaseQuality(item);
 
 		        if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-		        {
 			        IncreaseQualityForBackstageItem(item);
-		        }
 	        }
         }
         
@@ -101,18 +94,14 @@ namespace Katas
 
 		private static void IncreaseQuality(Item item)
 		{
-			if (item.Quality < 50)
-			{
+			if (item.Quality < MaxQualityForIncrease)
 				item.Quality++;
-			}
 		}
 
 		private static void DecreaseQuality(Item item)
 		{
 			if (item.Quality > 0)
-			{
 				item.Quality--;
-			}
 		}
     }
 }
