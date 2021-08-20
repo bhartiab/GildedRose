@@ -9,16 +9,6 @@ namespace Katas
     {
         
         [Fact]
-        public void TestAgedBrieShouldIncreaseQualityAndDecreaseSellIn()
-        {
-            var inputItem = new Item("Aged Brie", 2, 0);
-
-            var actual=  GildedRose.updateQualityPerItem(inputItem);
-
-            actual.Quality.Should().Be(1);
-            actual.SellIn.Should().Be(1);
-        }
-        [Fact]
         public void TestSulfurasShouldNotDecreaseQualityAndNeverToBeSold()
         {
 
@@ -29,59 +19,47 @@ namespace Katas
             actual.Quality.Should().Be(80);
             actual.SellIn.Should().Be(0);
         }
-        [Fact]
-        public void TestQualityDegradeTwiceIfSellDatePassed()
+        
+        [Theory]
+        [InlineData("Quality of an item degrades daily", 1, 20, 19)]
+        [InlineData("Quality of an item degrades twice if sell date is passed", 0, 20, 18)]
+        [InlineData("Quality of an item is never negative", 10, 0, 0)]
+        [InlineData("Quality of an item doesnt change if set to negative (edge case)", 10, -1, -1)]
+        [InlineData("Normal items can have quality more than 50", 10, 54, 53)]
+        public void NormalItemTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var inputItem = new Item("NormalItem",0,4);
-            
-            var actual = GildedRose.updateQualityPerItem(inputItem); 
-            
-            actual.Quality.Should().Be(2);
-
-            actual.SellIn.Should().Be(-1);
-
+            var actual = GildedRose.updateQualityPerItem(new Item("NormalItem", sellIn, quality));
+            actual.Quality.Should().Be(expectedQuality);
+            actual.SellIn.Should().Be(sellIn - 1);
         }
-        [Fact]
-        public void TestQualityOfAnItemNeverNegative()
+        
+        [Theory]
+        [InlineData("Aged Brie increases quality", 10, 20, 21)]
+        [InlineData("Aged Brie increases quality by one on the last day", 1, 20, 21)]
+        [InlineData("Aged Brie increases quality by two when expired", 0, 20, 22)]
+        [InlineData("Aged Brie increases quality by two when past expiration", -99, 20, 22)]
+        [InlineData("Aged Brie should not increase quality more than 50", 10, 50, 50)]
+        [InlineData("If Aged Brie quality greater than 50, quality does not increase", 10, 51, 51)]
+        public void AgedBrieTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var inputItem = new Item("NormalItem", 1, 0);
-
-            var actual = GildedRose.updateQualityPerItem(inputItem);
-
-            actual.Quality.Should().Be(0);
-
+            var actual = GildedRose.updateQualityPerItem(new Item("Aged Brie", sellIn, quality));
+            actual.Quality.Should().Be(expectedQuality);
+            actual.SellIn.Should().Be(sellIn - 1);
         }
-        [Fact]
-        public void TestNormalItemsCanHaveQualityMoreThan50()
+
+        [Theory]
+        [InlineData("Quality increases by 1 when there are 99 days (more than 10 days)", 99, 20, 21)]
+        [InlineData("Quality increases by 1 when there are ll days (more than 10 days)", 11, 20, 21)]
+        [InlineData("Quality increases by 2 when there are 10 days (10 days or less)", 10, 20, 22)]
+        [InlineData("Quality increases by 2 when there are 6 days (10 days or less)", 6, 20, 22)]
+        [InlineData("Quality increases by 3 when there are 5 days (5 days or less)", 5, 20, 23)]
+        [InlineData("Quality increases by 3 when there is 1 day left (5 days or less)", 1, 20, 23)]
+        [InlineData("Quality drops to zero when no days left", 0, 20, 0)]
+        public void BackstagePassesTests(string testName, int sellIn, int quality, int expectedQuality)
         {
-            var inputItem = new Item("NormalItem", 1, 54);
-
-            var actual = GildedRose.updateQualityPerItem(inputItem);
-
-            actual.Quality.Should().Be(53);
-
-        }
-        [Fact]
-        public void TestAgedBrieShouldNotIncreaseQualityMoreThan50()
-        {
-            var inputItem = new Item("Aged Brie", 2, 50);
-
-            var actual = GildedRose.updateQualityPerItem(inputItem);
-
-            actual.Quality.Should().Be(50);
-        }
-        [Fact]
-        public void TestBackstagePasses()
-        {
-           // "Backstage passes", like aged brie, increases in Quality as it's SellIn value approaches; Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but Quality drops to 0 after the concert
-            var inputItem = new Item("Backstage passes to a TAFKAL80ETC concert", 10, 20);
-
-            var actual = GildedRose.updateQualityPerItem(inputItem);
-            // Quality increases by 2 when there are 10 days 
-            actual.Quality.Should().Be(22);
-            actual.SellIn.Should().Be(9);
-
-
+            var actual = GildedRose.updateQualityPerItem(new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality));
+            actual.Quality.Should().Be(expectedQuality);
+            actual.SellIn.Should().Be(sellIn - 1);
         }
     }
 }
