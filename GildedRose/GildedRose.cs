@@ -49,26 +49,26 @@ namespace Katas
 
         private static void UpdateQualityForItem(Item item)
         {
-	        if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
-			{
-				if ((item.Quality > 0))
-				{
-					item.Quality--;
-				}
-			}
-			else
-			{
-				if (item.Quality < 50)
-				{
-					item.Quality++;
+	        if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
+	        {
+		        if (item.Quality < 50)
+		        {
+			        item.Quality++;
 
-					if (item.Name=="Backstage passes to a TAFKAL80ETC concert")
-					{
-						IncreaseQualityForBackstageItem(item);
-					}
-				}
-			}
-		}
+			        if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+			        {
+				        IncreaseQualityForBackstageItem(item);
+			        }
+		        }
+	        }
+	        else
+	        {
+		        if ((item.Quality > 0))
+		        {
+			        item.Quality--;
+		        }
+	        }
+        }
 
 		private static void IncreaseQualityForBackstageItem(Item item)
 		{
