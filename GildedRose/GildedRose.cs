@@ -5,24 +5,32 @@ namespace Katas
 {
     public class GildedRose
     {
-        private static IList<Item> _items = null;
+        private IList<Item> _items;
+
+        private GildedRose(IList<Item> items)
+        {
+	        _items = items;
+        }
 
         public static void Main(string[] args)
         {
             Console.WriteLine("OMGHAI!");
 
-			_items = new List<Item>();
-			_items.Add(new Item("+5 Dexterity Vest", 10, 20));
-			_items.Add(new Item("Aged Brie", 2, 0));
-			_items.Add(new Item("Elixir of the Mongoose", 5, 7));
-			_items.Add(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
-			_items.Add(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
-			_items.Add(new Item("Conjured Mana Cake", 3, 6));
+            var items = new List<Item>
+            {
+	            new Item("+5 Dexterity Vest", 10, 20),
+	            new Item("Aged Brie", 2, 0),
+	            new Item("Elixir of the Mongoose", 5, 7),
+	            new Item("Sulfuras, Hand of Ragnaros", 0, 80),
+	            new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20),
+	            new Item("Conjured Mana Cake", 3, 6)
+            };
 
-			AgeItems();
+            var store = new GildedRose(items);
+			store.AgeItems();
         }
 
-		public static void AgeItems()
+		public void AgeItems()
 		{
 			foreach (var item in _items)
 			{
