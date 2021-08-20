@@ -27,79 +27,14 @@ namespace Katas
 			for (int i = 0; i < items.Count; i++)
 			{
 				updateQualityPerItem(items[i]);
-				//if ((!"Aged Brie".Equals(items[i].Name)) && !"Backstage passes to a TAFKAL80ETC concert".Equals(items[i].Name))
-				//{
-				//	if (items[i].Quality > 0)
-				//	{
-				//		if (!"Sulfuras, Hand of Ragnaros".Equals(items[i].Name))
-				//		{
-				//			items[i].Quality = items[i].Quality - 1;
-				//		}
-				//	}
-				//}
-				//else
-				//{
-				//	if (items[i].Quality < 50)
-				//	{
-				//		items[i].Quality = items[i].Quality + 1;
-
-				//		if ("Backstage passes to a TAFKAL80ETC concert".Equals(items[i].Name))
-				//		{
-				//			if (items[i].SellIn < 11)
-				//			{
-				//				if (items[i].Quality < 50)
-				//				{
-				//					items[i].Quality = (items[i].Quality + 1);
-				//				}
-				//			}
-
-				//			if (items[i].SellIn < 6)
-				//			{
-				//				if (items[i].Quality < 50)
-				//				{
-				//					items[i].Quality = (items[i].Quality + 1);
-				//				}
-				//			}
-				//		}
-				//	}
-				//}
-
-				//if (!"Sulfuras, Hand of Ragnaros".Equals(items[i].Name))
-				//{
-				//	items[i].SellIn = (items[i].SellIn - 1);
-				//}
-
-				//if (items[i].SellIn < 0)
-				//{
-				//	if (!"Aged Brie".Equals(items[i].Name))
-				//	{
-				//		if (!"Backstage passes to a TAFKAL80ETC concert".Equals(items[i].Name))
-				//		{
-				//			if (items[i].Quality > 0)
-				//			{
-				//				if (!"Sulfuras, Hand of Ragnaros".Equals(items[i].Name))
-				//				{
-				//					items[i].Quality = (items[i].Quality - 1);
-				//				}
-				//			}
-				//		}
-				//		else
-				//		{
-				//			items[i].Quality = (items[i].Quality - items[i].Quality);
-				//		}
-				//	}
-				//	else
-				//	{
-				//		if (items[i].Quality < 50)
-				//		{
-				//			items[i].Quality = (items[i].Quality + 1);
-				//		}
-				//	}
-				//}
 			}
 		}
 		public static Item updateQualityPerItem(Item item)
 		{
+			if (item.Name == "Sulfuras, Hand of Ragnaros")
+			{
+				return item;
+			}
 
 			UpdateQualityValue(item);
 			UpdateSellInValue(item);
@@ -109,13 +44,11 @@ namespace Katas
 
         private static void UpdateQualityValue(Item item)
         {
-			if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
+	        if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
 			{
-				if ((item.Quality > 0) && (item.Name != "Sulfuras, Hand of Ragnaros"))
+				if ((item.Quality > 0))
 				{
-
 					item.Quality--;
-
 				}
 			}
 			else
@@ -127,7 +60,6 @@ namespace Katas
 					if (item.Name=="Backstage passes to a TAFKAL80ETC concert")
 					{
 						IncreaseQualityForBackstageItem(item);
-
 					}
 				}
 			}
@@ -147,10 +79,7 @@ namespace Katas
 		}
         private static void UpdateSellInValue(Item item)
 		{
-			if (item.Name != "Sulfuras, Hand of Ragnaros")
-			{
-				item.SellIn = (item.SellIn - 1);
-			}
+			item.SellIn = (item.SellIn - 1);
 
 			if (item.SellIn < 0)
 			{
@@ -160,31 +89,27 @@ namespace Katas
 
 		private static void HandleExpiredItem(Item  item)
 		{
-			
-				if (item.Name != "Aged Brie")
+			if (item.Name != "Aged Brie")
+			{
+				if (item.Name!="Backstage passes to a TAFKAL80ETC concert")
 				{
-					if (item.Name!="Backstage passes to a TAFKAL80ETC concert")
+					if (item.Quality > 0)
 					{
-						if (item.Quality > 0 && (item.Name!="Sulfuras, Hand of Ragnaros"))
-						{
-							
-								item.Quality--;
-							
-						}
-					}
-					else
-					{
-						item.Quality = 0;
+						item.Quality--;
 					}
 				}
 				else
 				{
-					if (item.Quality < 50)
-					{
-						item.Quality++;
-					}
+					item.Quality = 0;
 				}
-			
+			}
+			else
+			{
+				if (item.Quality < 50)
+				{
+					item.Quality++;
+				}
+			}
 		}
 			 
 	}
