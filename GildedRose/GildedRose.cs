@@ -49,64 +49,66 @@ namespace Katas
 
         private static void UpdateQualityForItem(Item item)
         {
-	        if (item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert")
+	        if (ItemValueIncreasesWithAge(item))
 	        {
-		        if (item.Quality < 50)
-		        {
-			        item.Quality++;
+		        IncreaseQuality(item);
 
-			        if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-			        {
-				        IncreaseQualityForBackstageItem(item);
-			        }
-		        }
-	        }
-	        else
-	        {
-		        if ((item.Quality > 0))
+		        if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
 		        {
-			        item.Quality--;
+			        IncreaseQualityForBackstageItem(item);
 		        }
+
+		        return;
 	        }
+	        
+	        DecreaseQuality(item);
         }
 
-		private static void IncreaseQualityForBackstageItem(Item item)
-		{
-			if (item.SellIn < 11 && item.Quality < 50)
-			{
-				item.Quality++;
-			}
+        private static bool ItemValueIncreasesWithAge(Item item)
+        {
+	        return item.Name == "Aged Brie" || item.Name == "Backstage passes to a TAFKAL80ETC concert";
+        }
 
-			if (item.SellIn < 6 && item.Quality < 50)
-			{
-				item.Quality++;
-			}
+        private static void IncreaseQualityForBackstageItem(Item item)
+		{
+			if (item.SellIn < 11)
+				IncreaseQuality(item);
+
+			if (item.SellIn < 6)
+				IncreaseQuality(item);
 		}
 
 		private static void HandleExpiredItem(Item  item)
 		{
-			if (item.Name != "Aged Brie")
+			if (item.Name == "Aged Brie")
 			{
-				if (item.Name!="Backstage passes to a TAFKAL80ETC concert")
-				{
-					if (item.Quality > 0)
-					{
-						item.Quality--;
-					}
-				}
-				else
-				{
-					item.Quality = 0;
-				}
+				IncreaseQuality(item);
+				return;
 			}
-			else
+			
+			if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
 			{
-				if (item.Quality < 50)
-				{
-					item.Quality++;
-				}
+				item.Quality = 0;
+				return;
+			}
+			
+			DecreaseQuality(item);
+		}
+
+		private static void IncreaseQuality(Item item)
+		{
+			if (item.Quality < 50)
+			{
+				item.Quality++;
 			}
 		}
-			 
-	}
+
+		private static void DecreaseQuality(Item item)
+		{
+			if (item.Quality > 0)
+			{
+				item.Quality--;
+			}
+		}
+    }
 }
